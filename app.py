@@ -12,7 +12,9 @@
   使用者隨時開網站都能看到最新結果
 """
 import dataclasses
+import json
 import logging
+import subprocess
 import threading
 import schedule
 import time
@@ -108,6 +110,28 @@ def _run_analysis() -> dict:
     }
 
 
+def _save_and_push(data: dict):
+    """儲存 results.json 並推送到 GitHub（讓 Render 取得最新結果）"""
+    try:
+        work_dir = str(Path(__file__).parent)
+        with open(Path(work_dir) / "results.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        logger.info("results.json 已儲存")
+
+        subprocess.run(["git", "add", "results.json"], cwd=work_dir, capture_output=True)
+        commit = subprocess.run(
+            ["git", "commit", "-m", f"Update results {datetime.now().strftime('%Y-%m-%d %H:%M')}"],
+            cwd=work_dir, capture_output=True
+        )
+        if commit.returncode == 0:
+            subprocess.run(["git", "push"], cwd=work_dir, capture_output=True)
+            logger.info("results.json 已推送到 GitHub")
+        else:
+            logger.info("results.json 無變化，略過推送")
+    except Exception as e:
+        logger.error(f"推送 results.json 失敗: {e}")
+
+
 def _refresh_cache():
     """更新快取（可從排程或 API 觸發）"""
     with _lock:
@@ -122,6 +146,7 @@ def _refresh_cache():
             _cache["data"] = data
             _cache["timestamp"] = datetime.now()
         logger.info("快取已更新")
+        threading.Thread(target=_save_and_push, args=(data,), daemon=True).start()
     except Exception as e:
         logger.error(f"分析失敗: {e}", exc_info=True)
     finally:
