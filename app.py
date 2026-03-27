@@ -175,16 +175,11 @@ def api_analyze():
         return jsonify({"cached": True, "cache_age": int(cache_age), **_cache["data"]})
 
     if analysing:
-        # 分析中，讓前端等待後重試
         return jsonify({"error": "analysing", "message": "分析進行中，請稍後重試"}), 202
 
-    # 在背景執行分析，同步等待完成後回傳
-    _refresh_cache()
-
-    with _lock:
-        if _cache["data"]:
-            return jsonify({"cached": False, "cache_age": 0, **_cache["data"]})
-        return jsonify({"error": "分析失敗，請查看 logs/ 目錄"}), 500
+    # 在背景執行分析，立即返回 202，不阻塞 worker
+    threading.Thread(target=_refresh_cache, daemon=True).start()
+    return jsonify({"error": "analysing", "message": "分析已啟動，請稍後重試"}), 202
 
 
 @app.route("/api/health")
