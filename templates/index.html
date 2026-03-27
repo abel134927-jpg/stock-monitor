@@ -510,11 +510,17 @@ async function loadData(forceRefresh = false) {
   try {
     const url  = forceRefresh ? '/api/analyze?refresh=1' : '/api/analyze';
     const resp = await fetch(url);
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.error || `HTTP ${resp.status}`);
-    }
     const data = await resp.json();
+
+    if (data.error === 'analysing') {
+      document.getElementById('loadingMsg').textContent = '分析進行中，15 秒後自動重試...';
+      setTimeout(() => loadData(false), 15000);
+      return;
+    }
+
+    if (!resp.ok) {
+      throw new Error(data.error || `HTTP ${resp.status}`);
+    }
 
     // 統計
     renderStats(data.summary);
