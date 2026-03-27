@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>港股監測系統</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* ── 全域 ─────────────────────────────────── */
+    :root {
+      --c-a:     #1b5e20;
+      --c-b:     #2e7d32;
+      --c-c:     #e65100;
+      --c-watch: #bf360c;
+      --c-sell:  #b71c1c;
+      --c-hold:  #616161;
+    }
+    body {
+      background: #eef0f4;
+      font-family: -apple-system, 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── 導覽列 ───────────────────────────────── */
+    .top-bar {
+      background: linear-gradient(135deg, #0d1b6e 0%, #1565c0 100%);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-bar .brand {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .top-bar .meta {
+      color: rgba(255,255,255,.7);
+      font-size: 12px;
+    }
+
+    /* ── 統計列 ───────────────────────────────── */
+    .stat-pill {
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      color: #fff;
+      user-select: none;
+    }
+    .stat-pill .count  { font-size: 2rem; font-weight: 800; line-height: 1; }
+    .stat-pill .label  { font-size: 11px; opacity: .9; margin-top: 4px; }
+
+    /* ── 股票卡片 ─────────────────────────────── */
+    .stock-card {
+      border-radius: 14px;
+      border: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      overflow: hidden;
+      transition: transform .18s, box-shadow .18s;
+      background: #fff;
+    }
+    .stock-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.13);
+    }
+    .card-top-bar { height: 6px; }
+    .bar-A     { background: var(--c-a); }
+    .bar-B     { background: var(--c-b); }
+    .bar-C     { background: var(--c-c); }
+    .bar-watch { background: var(--c-watch); }
+    .bar-sell  { background: var(--c-sell); }
+    .bar-hold  { background: var(--c-hold); }
+
+    /* 標籤 */
+    .sig-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .sig-A     { background: var(--c-a); }
+    .sig-B     { background: var(--c-b); }
+    .sig-C     { background: var(--c-c); }
+    .sig-watch { background: var(--c-watch); }
+    .sig-sell  { background: var(--c-sell); }
+    .sig-hold  { background: var(--c-hold); }
+
+    /* 指標方塊 */
+    .ind-box {
+      background: #f5f6fa;
+      border-radius: 8px;
+      padding: 6px 0;
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+    }
+    .ind-box .val {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
+      line-height: 1.2;
+    }
+
+    /* 輔助條件徽章 */
+    .aux-badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 2px 2px 0 0;
+    }
+
+    /* 價格目標 */
+    .price-row {
+      background: #f0faf2;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+    .price-row .p-label { font-size: 11px; color: #888; }
+    .price-row .p-val   { font-size: 15px; font-weight: 700; }
+
+    /* 賣出區塊 */
+    .sell-box {
+      background: #fff5f5;
+      border: 1px solid #ffcdd2;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #c62828;
+    }
+
+    /* AI 分析 */
+    .ai-section {
+      margin-top: 10px;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    .ai-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1565c0;
+      letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+    .ai-body {
+      background: #f8f9fb;
+      border-left: 3px solid #1565c0;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    /* Sparkline */
+    .spark-wrap { height: 52px; }
+
+    /* 漲跌色 */
+    .up   { color: #2e7d32; font-weight: 700; }
+    .down { color: #c62828; font-weight: 700; }
+
+    /* Loading */
+    .loading-screen {
+      position: fixed; inset: 0;
+      background: rgba(238,240,244,.92);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      gap: 14px;
+    }
+    .loading-screen .spinner-border { width: 3.2rem; height: 3.2rem; }
+    .loading-screen p { color: #555; font-size: 15px; margin: 0; }
+
+    /* 空狀態 */
+    .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<!-- ── 導覽列 ──────────────────────────────────────────────── -->
+<div class="top-bar">
+  <div>
+    <div class="brand"><i class="fas fa-chart-candlestick me-2"></i>港股監測系統</div>
+    <div class="meta">HKEX · 動態確信度分級 · AI 分析</div>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <div class="text-end d-none d-sm-block">
+      <div class="meta" id="reportDate">—</div>
+      <div class="meta" id="lastUpdate">—</div>
+    </div>
+    <button id="refreshBtn" class="btn btn-outline-light btn-sm px-3" onclick="loadData(true)">
+      <i class="fas fa-arrows-rotate me-1"></i>重新整理
+    </button>
+  </div>
+</div>
+
+<!-- ── Loading ─────────────────────────────────────────────── -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner-border text-primary"></div>
+  <p id="loadingMsg">正在抓取港股數據並分析...</p>
+  <small class="text-muted">首次載入需 30–90 秒（含 AI 分析）</small>
+</div>
+
+<!-- ── 錯誤提示 ────────────────────────────────────────────── -->
+<div class="alert alert-danger mx-3 mt-3 d-none" id="errorAlert" role="alert">
+  <i class="fas fa-circle-exclamation me-2"></i>
+  <span id="errorMsg"></span>
+  <button class="btn btn-sm btn-outline-danger ms-3" onclick="loadData(true)">重試</button>
+</div>
+
+<!-- ── 主內容 ──────────────────────────────────────────────── -->
+<div id="mainContent" style="display:none;">
+  <div class="container-fluid px-3 px-md-4 py-3">
+
+    <!-- 統計列 -->
+    <div class="row g-2 mb-3" id="statRow"></div>
+
+    <!-- 快取提示 -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-muted small" id="marketLabel"></span>
+      <span class="badge bg-secondary small d-none" id="cacheTag">
+        <i class="fas fa-database me-1"></i>快取結果
+      </span>
+    </div>
+
+    <!-- 卡片格 -->
+    <div class="row g-3" id="cardsGrid"></div>
+
+    <!-- 底部免責聲明 -->
+    <div class="text-center text-muted mt-4 mb-3" style="font-size:12px;">
+      本系統僅供技術分析參考，不構成任何投資建議。港股市場存在風險，投資須謹慎。
+    </div>
+  </div>
+</div><!-- end mainContent -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ── 輔助函式 ──────────────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function chgHtml(pct) {
+  const cls = pct >= 0 ? 'up' : 'down';
+  const str = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+  return `<span class="${cls}">${str}</span>`;
+}
+function rsiColor(v) {
+  if (v >= 80) return '#c62828';
+  if (v >= 65) return '#f57f17';
+  if (v <= 30) return '#1565c0';
+  if (v <= 45) return '#1976d2';
+  return '#2e7d32';
+}
+
+// ── 卡片樣式對照 ──────────────────────────────────────────────
+function cardStyle(action, conf) {
+  if (action === '買進') {
+    const map = { A: ['bar-A','sig-A'], B: ['bar-B','sig-B'], C: ['bar-C','sig-C'] };
+    return map[conf] || ['bar-hold','sig-hold'];
+  }
+  if (action === '觀察中') return ['bar-watch','sig-watch'];
+  if (action === '賣出')   return ['bar-sell','sig-sell'];
+  return ['bar-hold','sig-hold'];
+}
+
+// ── 渲染統計列 ────────────────────────────────────────────────
+function renderStats(s) {
+  const items = [
+    { label: 'A類買進', val: s.buy_a,    bg: 'var(--c-a)'     },
+    { label: 'B類買進', val: s.buy_b,    bg: 'var(--c-b)'     },
+    { label: 'C類買進', val: s.buy_c,    bg: 'var(--c-c)'     },
+    { label: '觀察中',  val: s.watching, bg: 'var(--c-watch)' },
+    { label: '賣出警示',val: s.sell,     bg: 'var(--c-sell)'  },
+    { label: '觀望',    val: s.hold,     bg: 'var(--c-hold)'  },
+  ];
+  document.getElementById('statRow').innerHTML = items.map(it => `
+    <div class="col-4 col-sm-2">
+      <div class="stat-pill" style="background:${it.bg}">
+        <div class="count">${it.val}</div>
+        <div class="label">${it.label}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── 渲染單張卡片 ──────────────────────────────────────────────
+function renderCard(s) {
+  const [barCls, badgeCls] = cardStyle(s.action, s.confidence);
+  const chartId = 'ch_' + s.code.replace(/\W/g,'_');
+
+  // 輔助條件徽章
+  const auxHtml = (s.aux_conditions||[]).map(c =>
+    `<span class="aux-badge">${esc(c)}</span>`).join('');
+
+  // 核心訊號標籤
+  const coreHtml = s.core_condition && s.core_condition !== '-'
+    ? `<span class="badge bg-dark me-1" style="font-size:11px;">${esc(s.core_condition)}訊號</span>`
+    : '';
+
+  // 賣出
+  const sellHtml = (s.sell_reasons||[]).length ? `
+    <div class="sell-box mt-2">
+      <i class="fas fa-triangle-exclamation me-1"></i>${esc(s.sell_reasons.join(' | '))}
+    </div>` : '';
+
+  // 買進目標價
+  const priceHtml = s.action === '買進' ? `
+    <div class="price-row mt-2">
+      <div class="row text-center g-0">
+        <div class="col-4">
+          <div class="p-label">買入價</div>
+          <div class="p-val">${s.buy_price.toFixed(2)}</div>
+        </div>
+        <div class="col-4" style="border-left:1px solid #ddd;border-right:1px solid #ddd;">
+          <div class="p-label">停損價</div>
+          <div class="p-val" style="color:var(--c-sell);">${s.stop_loss.toFixed(2)}</div>
+        </div>
+        <div class="col-4">
+          <div class="p-label">目標價</div>
+          <div class="p-val" style="color:var(--c-a);">${s.target_price.toFixed(2)}</div>
+        </div>
+      </div>
+    </div>` : '';
+
+  // 觀察中提示
+  const watchHtml = s.action === '觀察中' ? `
+    <div class="alert alert-warning py-2 px-3 mt-2 mb-0" style="font-size:12px;border-radius:8px;">
+      <i class="fas fa-eye me-1"></i>突破幅度未達 3%，建議持續觀察
+    </div>` : '';
+
+  // AI 分析（直接顯示）
+  const aiHtml = s.ai_analysis ? `
+    <div class="ai-section">
+      <div class="ai-label"><i class="fas fa-robot me-1"></i>AI 分析</div>
+      <div class="ai-body">${esc(s.ai_analysis)}</div>
+    </div>` : '';
+
+  // MACD 色
+  const macdColor = s.macd_hist >= 0 ? 'var(--c-b)' : 'var(--c-sell)';
+  const macdStr   = (s.macd_hist >= 0 ? '+' : '') + s.macd_hist.toFixed(3);
+
+  // 20日箱體相對位置（進度條）
+  const boxRange = s.box_top - s.box_bottom;
+  const boxPct   = boxRange > 0
+    ? Math.min(100, Math.max(0, (s.close - s.box_bottom) / boxRange * 100)).toFixed(0)
+    : 50;
+
+  return `
+  <div class="col-12 col-md-6 col-xl-4">
+    <div class="stock-card h-100">
+      <div class="card-top-bar ${barCls}"></div>
+      <div class="p-3">
+
+        <!-- 標頭：名稱 + 訊號 -->
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div>
+            <div style="font-size:18px;font-weight:800;">${esc(s.name)}</div>
+            <div class="text-muted" style="font-size:12px;">${esc(s.code)}</div>
+          </div>
+          <div class="text-end">
+            <div><span class="sig-badge ${badgeCls}">${esc(s.label||s.action)}</span></div>
+            <div class="mt-1">${chgHtml(s.change_pct)}</div>
+          </div>
+        </div>
+
+        <!-- 價格 + 走勢圖 -->
+        <div class="d-flex align-items-center gap-3 mb-2">
+          <div>
+            <div style="font-size:1.65rem;font-weight:800;line-height:1;">
+              ${s.close.toFixed(2)}
+            </div>
+            <div class="text-muted" style="font-size:11px;">
+              HKD &nbsp;|&nbsp; 量比 ${s.volume_ratio.toFixed(2)}x
+            </div>
+          </div>
+          <div class="flex-grow-1 spark-wrap">
+            <canvas id="${chartId}"></canvas>
+          </div>
+        </div>
+
+        <!-- 技術指標 -->
+        <div class="row g-1 mb-2">
+          <div class="col-4">
+            <div class="ind-box">
+              RSI(14)
+              <span class="val" style="color:${rsiColor(s.rsi)};">${s.rsi.toFixed(1)}</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="ind-box">
+              KD
+              <span class="val">${s.k_val.toFixed(0)}&thinsp;/&thinsp;${s.d_val.toFixed(0)}</span>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="ind-box">
+              MACD柱
+              <span class="val" style="color:${macdColor};">${macdStr}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 均線 -->
+        <div class="d-flex gap-3 mb-2" style="font-size:12px;color:#666;">
+          <span>5MA&nbsp;<b style="color:#333;">${s.ma5.toFixed(2)}</b></span>
+          <span>20MA&nbsp;<b style="color:#333;">${s.ma20.toFixed(2)}</b></span>
+          <span>60MA&nbsp;<b style="color:#333;">${s.ma60.toFixed(2)}</b></span>
+        </div>
+
+        <!-- 20日箱體進度條 -->
+        <div class="mb-2">
+          <div class="d-flex justify-content-between" style="font-size:11px;color:#999;">
+            <span>箱底 ${s.box_bottom.toFixed(2)}</span>
+            <span>箱頂 ${s.box_top.toFixed(2)}</span>
+          </div>
+          <div class="progress mt-1" style="height:6px;border-radius:4px;">
+            <div class="progress-bar" role="progressbar"
+                 style="width:${boxPct}%;background:${boxPct > 80 ? '#2e7d32' : boxPct < 20 ? '#c62828' : '#1976d2'};">
+            </div>
+          </div>
+          <div class="text-muted mt-1" style="font-size:11px;">
+            收盤位於箱體 ${boxPct}% 位置
+          </div>
+        </div>
+
+        <!-- 訊號條件 -->
+        <div class="mb-2">
+          ${coreHtml}${auxHtml}
+        </div>
+
+        ${priceHtml}
+        ${sellHtml}
+        ${watchHtml}
+        ${aiHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── 渲染 Sparkline ────────────────────────────────────────────
+const _charts = {};
+function renderSparkline(id, prices) {
+  const canvas = document.getElementById(id);
+  if (!canvas || !prices || prices.length < 2) return;
+  if (_charts[id]) { _charts[id].destroy(); }
+
+  const isUp    = prices[prices.length - 1] >= prices[0];
+  const color   = isUp ? '#2e7d32' : '#c62828';
+  const fillClr = isUp ? 'rgba(46,125,50,.08)' : 'rgba(198,40,40,.08)';
+
+  _charts[id] = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels:   prices.map((_, i) => i),
+      datasets: [{
+        data: prices,
+        borderColor: color,
+        borderWidth: 1.8,
+        fill: true,
+        backgroundColor: fillClr,
+        pointRadius: 0,
+        tension: 0.35,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales:  { x: { display: false }, y: { display: false } },
+    },
+  });
+}
+
+// ── 主載入函式 ────────────────────────────────────────────────
+async function loadData(forceRefresh = false) {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>分析中...';
+
+  document.getElementById('loadingScreen').style.display  = 'flex';
+  document.getElementById('mainContent').style.display    = 'none';
+  document.getElementById('errorAlert').classList.add('d-none');
+
+  if (forceRefresh) {
+    document.getElementById('loadingMsg').textContent = '強制重新抓取與分析...';
+  }
+
+  try {
+    const url  = forceRefresh ? '/api/analyze?refresh=1' : '/api/analyze';
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${resp.status}`);
+    }
+    const data = await resp.json();
+
+    // 統計
+    renderStats(data.summary);
+
+    // 標頭資訊
+    document.getElementById('reportDate').textContent = `分析日期: ${data.date}`;
+    document.getElementById('lastUpdate').textContent = `更新: ${data.generated_at}`;
+    document.getElementById('marketLabel').textContent = `${data.market} · 共 ${data.summary.total} 支`;
+
+    // 快取標籤
+    document.getElementById('cacheTag').classList.toggle('d-none', !data.cached);
+
+    // 卡片
+    const grid = document.getElementById('cardsGrid');
+    if (!data.signals || data.signals.length === 0) {
+      grid.innerHTML = `<div class="col-12 empty-state">
+        <i class="fas fa-circle-info fa-2x mb-3"></i><br>今日暫無數據
+      </div>`;
+    } else {
+      grid.innerHTML = data.signals.map(s => renderCard(s)).join('');
+      // 等 DOM 更新後畫 Sparkline
+      requestAnimationFrame(() => {
+        data.signals.forEach(s => {
+          renderSparkline('ch_' + s.code.replace(/\W/g,'_'), s.price_history);
+        });
+      });
+    }
+
+    document.getElementById('mainContent').style.display = 'block';
+
+  } catch (err) {
+    document.getElementById('errorMsg').textContent = `載入失敗：${err.message}`;
+    document.getElementById('errorAlert').classList.remove('d-none');
+    document.getElementById('mainContent').style.display = 'block'; // 仍顯示舊數據
+  } finally {
+    document.getElementById('loadingScreen').style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-arrows-rotate me-1"></i>重新整理';
+  }
+}
+
+// ── 啟動 ─────────────────────────────────────────────────────
+// 首次載入
+loadData(false);
+
+// 每 30 分鐘自動刷新（快取內則不重新分析）
+setInterval(() => loadData(false), 30 * 60 * 1000);
+</script>
+</body>
+</html>
