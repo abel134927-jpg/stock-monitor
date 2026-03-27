@@ -4,9 +4,16 @@
 台股格式: 2330.TW / 美股格式: AAPL
 """
 import logging
+import requests
 import yfinance as yf
 import pandas as pd
 from typing import Optional
+
+# 設定 yfinance 底層 requests session 的 timeout
+_session = requests.Session()
+_session.request = lambda method, url, **kwargs: requests.Session.request(
+    _session, method, url, timeout=kwargs.pop("timeout", 20), **kwargs
+)
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +31,7 @@ def fetch_stock_data(code: str, period: str = "6mo", interval: str = "1d") -> Op
         DataFrame [Open, High, Low, Close, Volume]，失敗回傳 None
     """
     try:
-        ticker = yf.Ticker(code)
+        ticker = yf.Ticker(code, session=_session)
         df = ticker.history(period=period, interval=interval, auto_adjust=True)
 
         if df.empty:
