@@ -4,15 +4,21 @@
 台股格式: 2330.TW / 美股格式: AAPL
 """
 import logging
-import socket
+import requests
 import yfinance as yf
 import pandas as pd
 from typing import Optional
 
-# 強制所有 socket 連線最多等 20 秒（包含 yfinance 的 HTTP 請求）
-socket.setdefaulttimeout(20)
-
 logger = logging.getLogger(__name__)
+
+
+class _TimeoutSession(requests.Session):
+    """只對 yfinance 的 HTTP 請求設定 timeout，不影響其他連線"""
+    def request(self, method, url, **kwargs):
+        kwargs.setdefault("timeout", 20)
+        return super().request(method, url, **kwargs)
+
+_session = _TimeoutSession()
 
 
 def fetch_stock_data(code: str, period: str = "6mo", interval: str = "1d") -> Optional[pd.DataFrame]:
@@ -28,7 +34,7 @@ def fetch_stock_data(code: str, period: str = "6mo", interval: str = "1d") -> Op
         DataFrame [Open, High, Low, Close, Volume]，失敗回傳 None
     """
     try:
-        ticker = yf.Ticker(code)
+        ticker = yf.Ticker(code, session=_session)
         df = ticker.history(period=period, interval=interval, auto_adjust=True)
 
         if df.empty:
