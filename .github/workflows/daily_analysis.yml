@@ -1,0 +1,37 @@
+name: Daily Stock Analysis
+
+on:
+  schedule:
+    - cron: '30 8 * * 1-5'  # 16:30 HKT (08:30 UTC), 週一至週五
+  workflow_dispatch:          # 允許手動觸發
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run analysis
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: python run_analysis.py
+
+      - name: Commit and push results
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add results.json
+          git diff --staged --quiet || git commit -m "Update results $(date +'%Y-%m-%d %H:%M') HKT"
+          git push
