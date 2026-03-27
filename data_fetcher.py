@@ -24,12 +24,16 @@ def fetch_stock_data(code: str, period: str = "6mo", interval: str = "1d") -> Op
         DataFrame [Open, High, Low, Close, Volume]，失敗回傳 None
     """
     try:
-        ticker = yf.Ticker(code)
-        df = ticker.history(period=period, interval=interval, auto_adjust=True)
+        df = yf.download(code, period=period, interval=interval,
+                         auto_adjust=True, progress=False)
 
         if df.empty:
             logger.warning(f"[{code}] 無法取得數據（可能代號錯誤或該交易日無資料）")
             return None
+
+        # yf.download 回傳 MultiIndex 欄位，壓平為單層
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = [col[0] for col in df.columns]
 
         df = df[["Open", "High", "Low", "Close", "Volume"]].copy()
         df.index = pd.to_datetime(df.index).tz_localize(None)  # 移除時區資訊
