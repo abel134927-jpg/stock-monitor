@@ -4,10 +4,13 @@
 台股格式: 2330.TW / 美股格式: AAPL
 """
 import logging
+import socket
 import yfinance as yf
 import pandas as pd
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from typing import Optional
+
+# 強制所有 socket 連線最多等 20 秒（包含 yfinance 的 HTTP 請求）
+socket.setdefaulttimeout(20)
 
 logger = logging.getLogger(__name__)
 
@@ -25,16 +28,8 @@ def fetch_stock_data(code: str, period: str = "6mo", interval: str = "1d") -> Op
         DataFrame [Open, High, Low, Close, Volume]，失敗回傳 None
     """
     try:
-        def _fetch():
-            return yf.Ticker(code).history(period=period, interval=interval, auto_adjust=True)
-
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_fetch)
-            try:
-                df = future.result(timeout=25)
-            except FuturesTimeoutError:
-                logger.warning(f"[{code}] 抓取超時 (25s)")
-                return None
+        ticker = yf.Ticker(code)
+        df = ticker.history(period=period, interval=interval, auto_adjust=True)
 
         if df.empty:
             logger.warning(f"[{code}] 無法取得數據（可能代號錯誤或該交易日無資料）")
