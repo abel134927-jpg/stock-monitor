@@ -73,7 +73,7 @@ def analyze(signal: SignalResult) -> str:
             ],
             max_tokens=350,
             temperature=0.3,
-            timeout=30,
+            timeout=10,
         )
         raw = response.choices[0].message.content.strip()
         # 移除 AI 回傳的字數限制標注，例如「（40字內）」「(30字內)」
