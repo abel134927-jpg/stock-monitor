@@ -1,6 +1,6 @@
 {
-  "date": "2026-06-18",
-  "generated_at": "2026-06-18 12:01:30",
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19 12:30:49",
   "market": "港股 (HKEX)",
   "summary": {
     "total": 6,
@@ -129,7 +129,7 @@
       "macd_hist": 0.1152,
       "k_val": 19.7,
       "d_val": 25.1,
-      "volume_ratio": 1.42,
+      "volume_ratio": 1.41,
       "box_top": 390.0,
       "box_bottom": 359.8,
       "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
