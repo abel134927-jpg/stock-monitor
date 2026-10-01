@@ -1,12 +1,12 @@
 {
-  "date": "2026-09-30",
-  "generated_at": "2026-09-30 08:46:11",
+  "date": "2026-10-01",
+  "generated_at": "2026-10-01 08:46:53",
   "market": "港股 (HKEX)",
   "summary": {
     "total": 6,
     "buy_a": 0,
-    "buy_b": 1,
-    "buy_c": 0,
+    "buy_b": 0,
+    "buy_c": 1,
     "watching": 0,
     "sell": 0,
     "hold": 5
@@ -15,31 +15,29 @@
     {
       "code": "3110.HK",
       "name": "GX中國電動車ETF",
-      "date": "2026-09-30",
+      "date": "2026-09-29",
       "action": "買進",
-      "confidence": "B",
+      "confidence": "C",
       "core_condition": "反轉",
-      "aux_conditions": [
-        "MACD轉正"
-      ],
+      "aux_conditions": [],
       "sell_reasons": [],
-      "close": 29.42,
-      "change_pct": 0.27,
-      "buy_price": 29.42,
-      "stop_loss": 29.0,
-      "target_price": 30.89,
-      "ma5": 29.19,
-      "ma20": 29.33,
+      "close": 29.14,
+      "change_pct": -0.68,
+      "buy_price": 29.14,
+      "stop_loss": 29.12,
+      "target_price": 30.6,
+      "ma5": 29.14,
+      "ma20": 29.32,
       "ma60": 29.31,
-      "rsi": 52.1,
-      "macd_hist": 0.0056,
-      "k_val": 70.0,
-      "d_val": 53.6,
-      "volume_ratio": 0.67,
+      "rsi": 46.5,
+      "macd_hist": -0.0123,
+      "k_val": 58.8,
+      "d_val": 49.9,
+      "volume_ratio": 0.32,
       "box_top": 29.85,
       "box_bottom": 28.7,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: fb212e9e-d03e-48fe-bd35-8171736bdfdf)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
-      "label": "買進(B類)",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 956f1ffe-c051-4c6d-896b-8874e6e8c831)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "label": "買進(C類)",
       "action_emoji": "✅",
       "price_history": [
         29.646860122680664,
@@ -71,7 +69,7 @@
         29.18000030517578,
         28.940000534057617,
         29.34000015258789,
-        29.420000076293945
+        29.139999389648438
       ],
       "date_history": [
         "2026-08-19",
@@ -103,7 +101,7 @@
         "2026-09-24",
         "2026-09-25",
         "2026-09-28",
-        "2026-09-30"
+        "2026-09-29"
       ]
     },
     {
@@ -130,7 +128,7 @@
       "volume_ratio": 1.21,
       "box_top": 39.1,
       "box_bottom": 36.32,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: f27835ce-e16e-456e-aee6-1849bdd70934)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: d1a183ff-77be-4207-89b2-938487c3d0eb)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
@@ -222,7 +220,7 @@
       "volume_ratio": 1.01,
       "box_top": 346.4,
       "box_bottom": 300.4,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 4291bfcb-5568-4404-959e-f7ee3f312daa)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 3ab5aebb-3890-4042-adfe-7aa57fc33505)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
@@ -314,7 +312,7 @@
       "volume_ratio": 1.1,
       "box_top": 118.3,
       "box_bottom": 104.2,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 528868c2-c5f7-4075-a72b-60827bfaabc5)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 36727955-9362-481b-8f41-db6d04da1d50)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
@@ -385,28 +383,28 @@
     {
       "code": "7709.HK",
       "name": "恒科指數反向1X",
-      "date": "2026-09-30",
+      "date": "2026-09-29",
       "action": "觀望",
       "confidence": "-",
       "core_condition": "-",
       "aux_conditions": [],
       "sell_reasons": [],
-      "close": 40.1,
-      "change_pct": 1.47,
+      "close": 40.0,
+      "change_pct": 1.21,
       "buy_price": 0.0,
       "stop_loss": 0.0,
       "target_price": 0.0,
-      "ma5": 41.72,
-      "ma20": 40.43,
+      "ma5": 41.7,
+      "ma20": 40.42,
       "ma60": 43.89,
-      "rsi": 47.6,
-      "macd_hist": 0.3764,
-      "k_val": 39.1,
-      "d_val": 51.5,
-      "volume_ratio": 1.09,
+      "rsi": 47.4,
+      "macd_hist": 0.37,
+      "k_val": 40.2,
+      "d_val": 51.8,
+      "volume_ratio": 1.15,
       "box_top": 47.0,
       "box_bottom": 31.84,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 7ea5274f-bc46-49f8-9749-2e24e7fb85d4)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: be16f6ff-1bbd-4e11-9b92-e5f0cadadc25)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
@@ -439,7 +437,7 @@
         42.52000045776367,
         42.63999938964844,
         39.52000045776367,
-        40.099998474121094
+        40.0
       ],
       "date_history": [
         "2026-08-19",
@@ -471,7 +469,7 @@
         "2026-09-24",
         "2026-09-25",
         "2026-09-28",
-        "2026-09-30"
+        "2026-09-29"
       ]
     },
     {
@@ -498,7 +496,7 @@
       "volume_ratio": 0.99,
       "box_top": 157.8,
       "box_bottom": 149.8,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: a25d1576-85cd-4100-86c6-cbe5c8df6f76)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: a1e005de-01ec-4c4e-9434-63dc965e3eb2)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
