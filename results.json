@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-12",
-  "generated_at": "2026-10-12 18:06:29",
+  "date": "2026-10-13",
+  "generated_at": "2026-10-13 16:14:35",
   "market": "港股 (HKEX)",
   "summary": {
     "total": 6,
@@ -38,7 +38,7 @@
       "volume_ratio": 1.42,
       "box_top": 118.3,
       "box_bottom": 102.6,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 69a96a7c-26e2-4dc8-88ae-57f178649ea0)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 3239eaee-8a5b-407b-831b-04845f97c581)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "買進(B類)",
       "action_emoji": "✅",
       "price_history": [
@@ -132,7 +132,7 @@
       "volume_ratio": 0.88,
       "box_top": 29.8,
       "box_bottom": 28.7,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 1b529cfa-a344-4125-8e48-5fa6deaf216a)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 57ca5d30-2401-4c93-9f3a-43938c679e65)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "買進(B類)",
       "action_emoji": "✅",
       "price_history": [
@@ -226,7 +226,7 @@
       "volume_ratio": 1.1,
       "box_top": 156.7,
       "box_bottom": 147.5,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 5e9cdf5f-0ad3-4354-a418-c8a5594d7cd8)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 7907cab3-a6bc-47bd-86a8-a088740fba8c)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "買進(B類)",
       "action_emoji": "✅",
       "price_history": [
@@ -318,7 +318,7 @@
       "volume_ratio": 1.42,
       "box_top": 325.6,
       "box_bottom": 294.6,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: c369c88b-2762-4ceb-8543-0b8495b9101d)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 97dfbf29-494c-4c28-b855-931b91cdba1c)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "買進(C類)",
       "action_emoji": "✅",
       "price_history": [
@@ -410,7 +410,7 @@
       "volume_ratio": 0.91,
       "box_top": 38.78,
       "box_bottom": 36.12,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 5e9f0290-fae3-42ff-a47e-4a59b2ef7e68)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: 47d16e6c-e223-4b68-830b-07816a0e9a52)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
@@ -502,7 +502,7 @@
       "volume_ratio": 0.73,
       "box_top": 47.0,
       "box_bottom": 35.02,
-      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: c923fa56-337d-4020-bd5a-52a889b46f90)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
+      "ai_analysis": "（AI 分析暫時失敗: Error code: 401 - {'error': {'message': 'Authentication Fails, Your api key: ****444b is invalid (request_id: e8a0ff47-e2ca-4af7-893a-af79bbf7cfec)', 'type': 'authentication_error', 'param': None, 'code': 'invalid_request_error'}}）",
       "label": "觀望",
       "action_emoji": "⏸",
       "price_history": [
